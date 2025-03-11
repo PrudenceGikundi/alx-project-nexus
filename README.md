@@ -18,14 +18,14 @@ CineScope is a **movie discovery app** that allows users to explore **trending**
 ✅ **Progressive Web App (PWA)** – Installable on mobile and desktop devices for a native app experience.
 
 ## 📸 Screenshots  
-laptop view
+## laptop view
 ![home page lightmode (before signup)](image.png)
 ![homepage darkmode](image-1.png)
 ![login page](image-2.png)
 ![signup page](image-3.png)
 ![homepage after signup](image-4.png)
 
-phone view
+## phone view
 ![PWA display](<WhatsApp Image 2025-03-11 at 05.04.31_5c338eb1.jpg>)
 ![home page](<WhatsApp Image 2025-03-11 at 05.04.30_a03ea1fd.jpg>)
 ![navigation menu](<WhatsApp Image 2025-03-11 at 05.04.30_30394e8e.jpg>)
