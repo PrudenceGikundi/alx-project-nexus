@@ -7,17 +7,18 @@ if (!API_KEY) {
   console.error("❌ Missing TMDB API Key. Please set NEXT_PUBLIC_TMDB_API_KEY in your .env file.");
 }
 
-//  Utility function to format movie data
+// Utility function to format movie data
 const mapMovieData = (movie: any): Movie => ({
   id: movie.id,
   title: movie.title || "Untitled",
-  poster: movie.poster_path
-    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-    : "/default-movie.png",
+  poster: movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : "/default-poster.png",
   releaseDate: movie.release_date || "Unknown",
-  overview: movie.overview || "No description available",
-  rating: typeof movie.vote_average === "number" ? movie.vote_average.toFixed(1) : "N/A",
+  overview: movie.overview || "No overview available.",
+  rating: movie.vote_average || 0,
+  onFavoriteToggle: () => {}, // Provide a default function
 });
+
+export default mapMovieData;
 
 // Fetch trending movies
 export const fetchTrendingMovies = async (): Promise<Movie[]> => {

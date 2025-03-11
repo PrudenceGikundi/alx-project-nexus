@@ -13,6 +13,9 @@ CineScope is a **movie discovery app** that allows users to explore **trending**
 ✅ **Watch Trailers** – Play trailers with a single click.  
 ✅ **Favorites List** – Add or remove movies from your favorites.  
 ✅ **Smooth UI** – Modern, responsive, and visually appealing interface.  
+✅ **User Authentication** – Login and signup functionality.  
+✅ **Profile Management** – View and update user profiles.  
+✅ **Progressive Web App (PWA)** – Installable on mobile and desktop devices for a native app experience.
 
 ## 📸 Screenshots  
 
@@ -110,4 +113,4 @@ The following endpoints are used:
 
 ## 📄 License  
 
-This project is licensed under the **MIT License**.  
+This project is licensed under the **MIT License**.

@@ -15,6 +15,37 @@
 }
 
 /* Apply background to body */
+html, body {
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+  background: var(--background) no-repeat center center fixed;
+  background-size: cover;
+  color: var(--foreground);
+  transition: all 0.5s;
+}
+
+#__next {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 body {
   @apply bg-background text-foreground transition-all duration-500;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  html, body {
+    background: var(--background) no-repeat center center fixed;
+    background-size: cover;
+  }
+}
+
+@media (max-width: 480px) {
+  html, body {
+    background: var(--background) no-repeat center center fixed;
+    background-size: cover;
+  }
 }

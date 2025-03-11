@@ -5,7 +5,11 @@ const withPWA = require("next-pwa")({
   skipWaiting: true,
 });
 
-const nextConfig = withPWA({
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
+
+const nextConfig = withPWA(withBundleAnalyzer({
   reactStrictMode: true,
   swcMinify: true,
   images: {
@@ -23,7 +27,13 @@ const nextConfig = withPWA({
     images: {
       allowFutureImage: true, // ✅ (Optional) Allows `next/future/image`
     },
+    modern: true, // Enable modern JavaScript output
   },
-});
+}));
 
-module.exports = nextConfig;
+module.exports = {
+  reactStrictMode: true,
+  images: {
+    domains: ['image.tmdb.org'],
+  },
+};

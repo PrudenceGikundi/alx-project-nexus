@@ -9,17 +9,36 @@ export const FavoritesContext = createContext<FavoritesContextTypeProp>({
 
 export const FavoritesProvider = ({ children }: { children: ReactNode }) => {
   const [favorites, setFavorites] = useState<Movie[]>([]);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
 
   useEffect(() => {
-    const storedFavorites = localStorage.getItem("favorites");
-    if (storedFavorites) {
-      setFavorites(JSON.parse(storedFavorites));
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      const user = JSON.parse(storedUser);
+      if (user?.email) {
+        setUserEmail(user.email);
+        fetchFavorites(user.email);
+      }
     }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("favorites", JSON.stringify(favorites));
-  }, [favorites]);
+    if (userEmail) {
+      localStorage.setItem("favorites", JSON.stringify(favorites));
+    }
+  }, [favorites, userEmail]);
+
+  const fetchFavorites = async (email: string) => {
+    try {
+      const res = await fetch(`https://cinewhisper.up.railway.app/favourites/${email}`);
+      if (res.ok) {
+        const data = await res.json();
+        setFavorites(data);
+      }
+    } catch (error) {
+      console.error("Error fetching favorites:", error);
+    }
+  };
 
   const addFavorite = (movie: Movie) => {
     if (!favorites.some((fav) => fav.id === movie.id)) {

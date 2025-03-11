@@ -6,6 +6,7 @@ export interface Movie {
   overview: string;
   rating: number;
   trailerUrl?: string;
+  onFavoriteToggle: () => void;
 }
 
 export interface FavoritesContextProps {

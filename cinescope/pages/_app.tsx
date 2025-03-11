@@ -1,20 +1,31 @@
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import { useEffect } from "react";
-import { FavoritesProvider } from "@/context/FavoritesContext"; // Import FavoritesProvider
+import { AuthProvider } from "@/context/AuthContext"; // Import AuthProvider
+import { FavoritesProvider } from "@/context/FavoritesContext"; // Keep FavoritesProvider
 
-export default function App({ Component, pageProps }: AppProps) {
+const MyApp = ({ Component, pageProps }: AppProps) => {
   useEffect(() => {
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("/sw.js").catch((err) => {
-        console.error("Service Worker registration failed:", err);
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(registration => {
+            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+          })
+          .catch(error => {
+            console.log('ServiceWorker registration failed: ', error);
+          });
       });
     }
   }, []);
 
   return (
-    <FavoritesProvider>
-      <Component {...pageProps} />
-    </FavoritesProvider>
+    <AuthProvider>
+      <FavoritesProvider>
+        <Component {...pageProps} />
+      </FavoritesProvider>
+    </AuthProvider>
   );
-}
+};
+
+export default MyApp;

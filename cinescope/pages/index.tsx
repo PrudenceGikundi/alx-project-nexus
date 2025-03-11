@@ -1,4 +1,4 @@
-import React, { useEffect, useState,Suspense, lazy, useRef } from "react";
+import React, { useEffect, useState, Suspense, lazy, useRef } from "react";
 import debounce from "lodash.debounce"; // Debounce for optimized search requests
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -9,7 +9,7 @@ import { fetchTrendingMovies, fetchMoviesBySearch } from "@/utils/api";
 const MovieCard = lazy(() => import("@/components/MovieCard"));
 
 const Home: React.FC = () => {
-  const [trendingMovies, setTrendingMovies] = useState<Movie[]>([]);
+  const [trendingMovies, setTrendingMovies] = useState<Movie[]>([]); // Trending movies state
   const [searchQuery, setSearchQuery] = useState(""); // Search input
   const [searchResults, setSearchResults] = useState<Movie[]>([]); // Search results
   const [loading, setLoading] = useState(false); // Loading state
@@ -30,7 +30,7 @@ const Home: React.FC = () => {
     getMovies();
   }, []);
 
-  // Ref to store the debounce function to prevent recreation on every render
+  // Debounced search function
   const fetchMoviesDebouncedRef = useRef(
     debounce(async (query: string) => {
       if (!query.trim()) {
@@ -52,6 +52,12 @@ const Home: React.FC = () => {
   useEffect(() => {
     fetchMoviesDebouncedRef.current(searchQuery);
   }, [searchQuery]);
+
+  // Function to update favorites
+  const updateFavorites = (movie: Movie) => {
+    console.log("Movie added to favorites:", movie);
+    // Implement logic for updating favorites
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-purple-600 to-pink-500 dark:from-gray-900 dark:to-gray-800 text-white transition-all">
@@ -83,7 +89,11 @@ const Home: React.FC = () => {
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 <Suspense fallback={<p>Loading movies...</p>}>
                   {searchResults.map((movie) => (
-                    <MovieCard key={movie.id} movie={movie} />
+                    <MovieCard
+                      key={movie.id}
+                      movie={movie}
+                      updateFavorites={updateFavorites} // Pass updateFavorites to MovieCard
+                    />
                   ))}
                 </Suspense>
               </div>
@@ -102,7 +112,11 @@ const Home: React.FC = () => {
               <Suspense fallback={<p>Loading...</p>}>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                   {trendingMovies.map((movie) => (
-                    <MovieCard key={movie.id} movie={movie} />
+                    <MovieCard
+                      key={movie.id}
+                      movie={movie}
+                      updateFavorites={updateFavorites} // Pass updateFavorites to MovieCard
+                    />
                   ))}
                 </div>
               </Suspense>

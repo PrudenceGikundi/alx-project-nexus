@@ -1,40 +1,34 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
+import MovieCard from "@/components/MovieCard";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import MovieCard from "@/components/MovieCard";
 import { FavoritesContext } from "@/context/FavoritesContext";
+import { Movie } from "@/interfaces";
 
+const Favorites = () => {
+  const { favorites, removeFavorite } = useContext(FavoritesContext);
 
-const Favorites: React.FC = () => {
-  const { favorites } = useContext(FavoritesContext);
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  if (!isMounted) return null; // Prevent hydration errors
+  const updateFavorites = (movie: Movie) => {
+    removeFavorite(movie.id);
+  };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-purple-600 to-pink-500 dark:from-gray-900 dark:to-gray-800 text-white transition-all">
+    <>
       <Navbar />
-
-      <main className="p-6 max-w-6xl mx-auto">
-        <h2 className="text-3xl font-bold text-gold-400 mb-4">Your Favorite Movies</h2>
-        
+      <div className="min-h-screen bg-gray-900 text-white p-8">
+        <h1 className="text-3xl font-bold mb-6">Your Favorite Movies</h1>
         {favorites.length === 0 ? (
-          <p className="text-lg text-gray-300">No favorites yet. Go add some!</p>
+          <p>No favorite movies yet.</p>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {favorites.map((movie) => (
-              <MovieCard key={movie.id} movie={movie} />
+              <MovieCard key={movie.id} movie={movie} updateFavorites={updateFavorites} />
             ))}
           </div>
         )}
-      </main>
-
+      </div>
       <Footer />
-    </div>
+    </>
   );
 };
 

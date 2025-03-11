@@ -1,91 +1,112 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import Link from "next/link";
 
 const Login = () => {
-    const [formData, setFormData] = useState({ email: "", password: "" });
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-    const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-        setError(null); // Clear error on input change
-    };
+  // Check if user is already logged in (on page load)
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      console.log("User already logged in:", storedUser);
+      router.push("/"); // Redirect to homepage
+    }
+  }, [router]);
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        setLoading(true);
-        setError(null);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
 
-        try {
-            const response = await fetch("/api/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(formData),
-            });
+    try {
+      const res = await fetch("https://cinewhisper.up.railway.app/auth/login/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
 
-            const data = await response.json();
-            if (data.success) {
-                localStorage.setItem("auth-token", data.token);
-                window.location.href = "/";
-            } else {
-                setError(data.errors || "Invalid email or password.");
-            }
-        } catch (error) {
-            console.error("Login error:", error);
-            setError("Something went wrong. Please try again.");
-        } finally {
-            setLoading(false);
-        }
-    };
+      const data = await res.json();
+      setLoading(false);
 
-    return (
-        <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-purple-900 to-purple-700 dark:from-gray-900 dark:to-gray-800">
-            <div className="w-full max-w-md bg-purple-950 dark:bg-gray-900 text-white rounded-lg shadow-xl p-8">
-                <h1 className="text-3xl font-bold text-center text-gold-500 mb-6">Login</h1>
+      if (res.ok) {
+        console.log("Login successful:", data);
 
-                {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+        // Store user details correctly
+        localStorage.setItem("auth-token", data.access); // Store access token
+        localStorage.setItem("refresh-token", data.refresh); // Store refresh token
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            user_id: data.user_id,
+            email: data.email,
+            username: data.username,
+          })
+        );
 
-                <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                    <input
-                        name="email"
-                        type="email"
-                        placeholder="Email"
-                        required
-                        value={formData.email}
-                        onChange={changeHandler}
-                        className="h-12 w-full px-4 bg-purple-800 text-white placeholder-gray-300 border border-purple-600 rounded-md focus:outline-none focus:ring-2 focus:ring-gold-500"
-                    />
-                    <input
-                        name="password"
-                        type="password"
-                        placeholder="Password"
-                        required
-                        value={formData.password}
-                        onChange={changeHandler}
-                        className="h-12 w-full px-4 bg-purple-800 text-white placeholder-gray-300 border border-purple-600 rounded-md focus:outline-none focus:ring-2 focus:ring-gold-500"
-                    />
-                    <button
-                        type="submit"
-                        className={`mt-4 w-full bg-gold-500 text-purple-900 font-semibold py-2 rounded-md transition duration-200 ${
-                            loading ? "opacity-50 cursor-not-allowed" : "hover:bg-gold-400"
-                        }`}
-                        disabled={loading}
-                    >
-                        {loading ? "Logging in..." : "Login"}
-                    </button>
-                </form>
+        console.log("User stored in localStorage:", localStorage.getItem("user"));
 
-                <p className="mt-4 text-center text-gray-300">
-                    Don&apos;t have an account?{" "}
-                    <Link href="/Signup" className="text-gold-400 hover:underline">
-                        Sign Up
-                    </Link>
-                </p>
-            </div>
-        </div>
-    );
+        // Redirect to profile page after successful login
+        router.push("/profile");
+      } else {
+        setError(data.detail || "Invalid credentials. Please try again.");
+      }
+    } catch {
+      setLoading(false);
+      setError("An error occurred. Please try again.");
+    }
+  };
+
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-purple-800 to-pink-500 text-white transition-all duration-500">
+      <div className="p-8 rounded-lg shadow-lg w-full max-w-md bg-white dark:bg-gray-900">
+        <h1 className="text-2xl font-bold text-center mb-4 text-gray-900 dark:text-white">Login</h1>
+
+        {error && <p className="text-red-500 text-center">{error}</p>}
+
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Email"
+            required
+            className="w-full p-2 rounded border bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white"
+          />
+
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Password"
+            required
+            className="w-full p-2 rounded border bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white"
+          />
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full p-2 bg-pink-600 dark:bg-pink-700 text-white rounded hover:bg-pink-700 dark:hover:bg-pink-800 transition"
+          >
+            {loading ? "Logging in..." : "Login"}
+          </button>
+        </form>
+
+        <p className="text-center mt-4 text-gray-100">
+          Don&apos;t have an account?{" "}
+          <Link href="/Signup" className="text-purple-300 hover:underline">
+            Sign up here
+          </Link>
+        </p>
+      </div>
+    </div>
+  );
 };
 
 export default Login;

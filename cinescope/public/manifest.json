@@ -20,5 +20,21 @@
   "dir": "auto",
   "lang": "en-US",
   "name": "cinescope movie recommender",
-  "short_name": "cinescope"
+  "short_name": "cinescope",
+  "start_url": "/",
+  "scope": "/",
+  "screenshots": [
+    {
+      "src": "screenshot1.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "screenshot2.png",
+      "sizes": "720x1280",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ]
 }
