@@ -18,8 +18,22 @@ CineScope is a **movie discovery app** that allows users to explore **trending**
 ✅ **Progressive Web App (PWA)** – Installable on mobile and desktop devices for a native app experience.
 
 ## 📸 Screenshots  
+laptop view
+![home page lightmode (before signup)](image.png)
+![homepage darkmode](image-1.png)
+![login page](image-2.png)
+![signup page](image-3.png)
+![homepage after signup](image-4.png)
 
-_(Add relevant screenshots here)_  
+phone view
+![PWA display](<WhatsApp Image 2025-03-11 at 05.04.31_5c338eb1.jpg>)
+![home page](<WhatsApp Image 2025-03-11 at 05.04.30_a03ea1fd.jpg>)
+![navigation menu](<WhatsApp Image 2025-03-11 at 05.04.30_30394e8e.jpg>)
+![signup](<WhatsApp Image 2025-03-11 at 05.04.29_e96219e7.jpg>)
+![profile](<WhatsApp Image 2025-03-11 at 05.04.29_34b0fbf2.jpg>)
+![search functionality](<WhatsApp Image 2025-03-11 at 05.04.28_7f62ad58.jpg>)
+
+## vercel live deployment : [cinescope movie app](https://cinescope-prudencegikundi-prudence-kendis-projects.vercel.app/)
 
 ## 🛠️ Tech Stack  
 
@@ -33,7 +47,7 @@ _(Add relevant screenshots here)_
 
 1. Clone the repository:  
    ```sh
-   git clone https://github.com/your-username/cinescope.git
+   git clone https://github.com/PrudenceGikundi/ALX-PROJECT-NEXUS.git
    cd cinescope
    ```
 
@@ -98,12 +112,6 @@ The following endpoints are used:
   https://api.themoviedb.org/3/search/movie?api_key=YOUR_API_KEY&query=MOVIE_NAME
   ```
 
-## 🎯 To-Do List  
-
-- [ ] Implement user authentication for watchlists.  
-- [ ] Add more filtering options (genre, year, etc.).  
-- [ ] Optimize performance and caching.  
-- [ ] Deploy on **Vercel**.  
 
 ## 🤝 Contributing  
 
